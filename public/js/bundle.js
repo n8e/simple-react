@@ -10171,7 +10171,6 @@ var App = function (_Component) {
     key: 'renderAllUsers',
     value: function renderAllUsers(users) {
       return users.map(function (user) {
-        console.log(user);
         return _react2.default.createElement(
           'tr',
           { key: user._id },
@@ -10209,6 +10208,11 @@ var App = function (_Component) {
       return _react2.default.createElement(
         'div',
         null,
+        _react2.default.createElement(
+          'h1',
+          null,
+          'All Users'
+        ),
         _react2.default.createElement(
           'table',
           null,

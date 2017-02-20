@@ -25,7 +25,6 @@ class App extends Component {
 
   renderAllUsers(users){
     return users.map(user => {
-      console.log(user);
       return (
         <tr key={user._id}>
           <td>{user.firstname}</td>
@@ -41,6 +40,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        <h1>All Users</h1>
         <table>
           <thead>
             <tr>

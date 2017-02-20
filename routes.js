@@ -6,7 +6,6 @@ module.exports = function(app, express) {
   api.get('/users', function(req, res) {
     var promise = User.find({}).exec();
     promise.then(users => {
-      console.log('Users', users);
       res.json(users);
     })
     .catch(err => {

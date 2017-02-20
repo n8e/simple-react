@@ -19,10 +19,6 @@ function openDatabaseConnection() {
 function startAppServer() {
   const compiler = webpack({
     entry: './app/main.js',
-    output: {
-      path: __dirname + '/public/',
-      filename: 'js/bundle.js'
-    },
     module: {
       loaders: [
         {
@@ -36,6 +32,11 @@ function startAppServer() {
           }
         }
       ]
+    },
+    output: {
+      publicPath: '/js/',
+      path: __dirname + '/public/',
+      filename: 'bundle.js'
     }
   });
 

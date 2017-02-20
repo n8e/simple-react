@@ -1,35 +1,72 @@
 var express = require('express');
+var webpack = require('webpack');
+var WebpackDevServer = require('webpack-dev-server');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
-var app = express();
+var appServer;
 
-mongoose.connect('mongodb://localhost/docms', (err) => {
-  if(err) {
-    console.log(err);
-  } else {
-    console.log('Connected to the database');
-  }
-})
-
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-
-app.use(bodyParser.json());
-
-app.use(express.static(__dirname + '/public'));
-
-var api = require('./routes')(app, express);
-app.use('/api', api);
-
-app.get('/*', function(req, res) {
-  res.sendFile('index.html', {
-    root: './public/'
+function openDatabaseConnection() {
+  mongoose.connect('mongodb://localhost/docms', (err) => {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log('Connected to the database');
+    }
   });
-});
+}
 
+function startAppServer() {
+  const compiler = webpack({
+    entry: './app/main.js',
+    output: {
+      path: __dirname + '/public/',
+      filename: 'js/bundle.js'
+    },
+    module: {
+      loaders: [
+        {
+          test: /\.jsx?/,
+          loader: 'babel-loader',
+          exclude: /node_modules/,
+          query: {
+            presets: [
+              'es2015', 'react'
+            ]
+          }
+        }
+      ]
+    }
+  });
 
-app.listen(3000, () => {
-  console.log('App is listening on port 3000');
-})
+  appServer = new WebpackDevServer(compiler, {
+    contentBase: './public',
+    stats: { colors: true },
+    publicPath: '/public/'
+  });
+
+  appServer.use(express.static(__dirname + '/public'));
+
+  var api = require('./routes')(appServer, express);
+  appServer.use('/api', api);
+
+  appServer.use(bodyParser.urlencoded({
+    extended: true
+  }));
+  appServer.use(bodyParser.json());
+
+  appServer.listen(3000, () => {
+    console.log('App is listening on port 3000');
+  });
+}
+
+function startServers() {
+  if (appServer) {
+    appServer.listeningApp.close();
+  }
+
+  startAppServer();
+  openDatabaseConnection();
+}
+
+startServers();

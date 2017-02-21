@@ -2,6 +2,7 @@
   "name": "simple-react",
   "version": "1.0.0",
   "description": "simple react setup",
+  "repository": "https://github.com/n8e/simple-react",
   "main": "server.js",
   "scripts": {
     "start": "webpack \nbabel-node server.js",

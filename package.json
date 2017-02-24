@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "webpack \nbabel-node server.js",
-    "test": "mocha ./test/*.spec.js -R spec",
+    "test": "mocha ./test/mocha/*.spec.js -R spec",
     "build": "webpack"
   },
   "author": "Nate Martin <godmetweenciati@gmail.com> (https://github.com/n8e)",
